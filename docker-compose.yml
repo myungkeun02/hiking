@@ -1,0 +1,17 @@
+version: "3"
+services:
+  hiking_db:
+    container_name: hiking_db
+    image: postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: hiking
+      PGDATA: /data/hiking_db
+    volumes:
+      - hiking_db:/data/hiking_db
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+volumes:
+  hiking_db:
