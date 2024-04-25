@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Builder
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member implements UserDetails {
@@ -52,20 +52,14 @@ public class Member implements UserDetails {
     @Column
     private RoleType roleType;
 
-    @Column
-    private String refreshToken;
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public void destroyRefreshToken() {
-        this.refreshToken = null;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(roleType.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override

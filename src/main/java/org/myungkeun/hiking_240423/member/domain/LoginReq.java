@@ -4,15 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.myungkeun.hiking_240423.entities.Member;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class MemberSignupRes {
-    private Long id;
-    private String nickname;
+public class LoginReq {
+    private String email;
+    private String password;
 }

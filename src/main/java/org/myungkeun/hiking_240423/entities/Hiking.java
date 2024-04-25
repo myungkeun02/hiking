@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Builder
-@Getter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hiking {
