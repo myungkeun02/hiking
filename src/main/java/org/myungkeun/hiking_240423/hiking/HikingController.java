@@ -1,6 +1,7 @@
 package org.myungkeun.hiking_240423.hiking;
 
 import lombok.RequiredArgsConstructor;
+import org.myungkeun.hiking_240423.base.BaseResponse;
 import org.myungkeun.hiking_240423.hiking.domain.HikingInfoRes;
 import org.myungkeun.hiking_240423.hiking.domain.HikingRegisterReq;
 import org.springframework.http.HttpStatus;
@@ -17,24 +18,51 @@ public class HikingController {
     private final HikingService hikingService;
 
     @PostMapping
-    public ResponseEntity<String> registerHiking(
+    public ResponseEntity<BaseResponse<String>> registerHiking(
             @RequestBody HikingRegisterReq registerReq
-    ) {
-        String result = hikingService.registerHiking(registerReq);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
+    )  {
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(BaseResponse
+                            .<String>builder()
+                            .statusCode(HttpStatus.CREATED.value())
+                            .data(hikingService.registerHiking(registerReq))
+                            .build());
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HikingInfoRes> getHikingById(
+    public ResponseEntity<BaseResponse<HikingInfoRes>> getHikingById(
             @PathVariable(name = "id") Long id
     ) {
-        HikingInfoRes result = hikingService.getHikingInfoById(id);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(BaseResponse
+                            .<HikingInfoRes>builder()
+                            .statusCode(HttpStatus.OK.value())
+                            .data(hikingService.getHikingInfoById(id))
+                            .build());
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<HikingInfoRes>> getAllHiking() {
-        List<HikingInfoRes> result = hikingService.getAllHiking();
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    public ResponseEntity<BaseResponse<List<HikingInfoRes>>> getAllHiking(
+    ) {
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(BaseResponse
+                            .<List<HikingInfoRes>>builder()
+                            .data(hikingService.getAllHiking())
+                            .build());
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

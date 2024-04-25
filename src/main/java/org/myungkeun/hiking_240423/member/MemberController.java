@@ -1,6 +1,7 @@
 package org.myungkeun.hiking_240423.member;
 
 import lombok.RequiredArgsConstructor;
+import org.myungkeun.hiking_240423.base.BaseResponse;
 import org.myungkeun.hiking_240423.member.domain.MemberSignupReq;
 import org.myungkeun.hiking_240423.member.domain.MemberSignupRes;
 import org.springframework.http.HttpStatus;
@@ -35,16 +36,18 @@ public class MemberController {
 //    }
 
     @PostMapping(value = "signup", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<MemberSignupRes> signupMember(
+    public ResponseEntity<BaseResponse<MemberSignupRes>> signupMember(
             @RequestBody MemberSignupReq req
     ) {
         try {
-            // 회원 가입 요청(req)을 처리하고 응답을 받아옵니다.
-            MemberSignupRes response = memberService.signupMember(req);
-            // 회원 가입이 성공하면 HTTP 상태 코드 201(CREATED)와 함께 회원 가입 응답을 반환합니다.
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(BaseResponse.<MemberSignupRes>builder()
+                            .data(memberService.signupMember(req))
+                            .statusCode(HttpStatus.CREATED.value())
+                            .build());
         } catch (Exception e) {
-            // 회원 가입 과정에서 예외가 발생하면, HTTP 상태 코드 500(내부 서버 오류)을 반환합니다.
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);        }
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
